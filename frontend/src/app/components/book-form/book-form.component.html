@@ -1,0 +1,16 @@
+<h2>{{ book.id ? 'Edit Book' : 'Add Book' }}</h2>
+<form (ngSubmit)="onSubmit()">
+  <label>Title:</label>
+  <input type="text" [(ngModel)]="book.title" name="title" required />
+
+  <label>Author:</label>
+  <input type="text" [(ngModel)]="book.author" name="author" required />
+
+  <label>ISBN:</label>
+  <input type="text" [(ngModel)]="book.isbn" name="isbn" required />
+
+  <label>Publication Date:</label>
+  <input type="date" [(ngModel)]="book.publicationDate" name="publicationDate" required />
+
+  <button type="submit">Save</button>
+</form>

@@ -1,0 +1,25 @@
+<h2>Book List</h2>
+<a routerLink="/add">Add Book</a>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>ISBN</th>
+      <th>Publication Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of books">
+      <td>{{ book.title }}</td>
+      <td>{{ book.author }}</td>
+      <td>{{ book.isbn }}</td>
+      <td>{{ book.publicationDate }}</td>
+      <td>
+        <a [routerLink]="['/edit', book.id]">Edit</a> |
+        <button (click)="deleteBook(book.id!)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
