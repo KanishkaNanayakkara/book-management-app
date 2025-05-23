@@ -1,0 +1,38 @@
+# --- Frontend (Angular/Node) ---
+node_modules/
+dist/
+tmp/
+out-tsc/
+npm-debug.log
+yarn-error.log
+
+# --- Backend (ASP.NET Core) ---
+**/bin/
+**/obj/
+**/out/
+*.db
+*.pdb
+*.cache
+*.log
+*.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.bak
+
+# --- IDE / Editor Specific ---
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# --- OS-specific ---
+.DS_Store
+Thumbs.db
+
+# --- Other ---
+wwwroot/
+coverage/
+.env
