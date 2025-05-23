@@ -1,16 +1,101 @@
-<h2>{{ book.id ? 'Edit Book' : 'Add Book' }}</h2>
-<form (ngSubmit)="onSubmit()">
-  <label>Title:</label>
-  <input type="text" [(ngModel)]="book.title" name="title" required />
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">
+      {{ isEditMode ? '✏️ Edit Book' : '➕ Add New Book' }}
+    </h1>
+  </div>
 
-  <label>Author:</label>
-  <input type="text" [(ngModel)]="book.author" name="author" required />
+  <div class="form-container">
+    <!-- Loading State -->
+    <div *ngIf="loading && isEditMode" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading book details...</p>
+    </div>
 
-  <label>ISBN:</label>
-  <input type="text" [(ngModel)]="book.isbn" name="isbn" required />
+    <!-- Form -->
+    <form *ngIf="!loading || !isEditMode" (ngSubmit)="onSubmit()" novalidate>
+      <!-- Title Field -->
+      <div class="form-group">
+        <label class="form-label" for="title">📖 Title *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          class="form-control"
+          [class.error]="hasError('title')"
+          [(ngModel)]="book.title"
+          (input)="onTitleChange()"
+          (blur)="onTitleChange()"
+          placeholder="Enter book title"
+          required
+        />
+        <span *ngIf="hasError('title')" class="error-message">{{ getError('title') }}</span>
+      </div>
 
-  <label>Publication Date:</label>
-  <input type="date" [(ngModel)]="book.publicationDate" name="publicationDate" required />
+      <!-- Author Field -->
+      <div class="form-group">
+        <label class="form-label" for="author">✍️ Author *</label>
+        <input
+          type="text"
+          id="author"
+          name="author"
+          class="form-control"
+          [class.error]="hasError('author')"
+          [(ngModel)]="book.author"
+          (input)="onAuthorChange()"
+          (blur)="onAuthorChange()"
+          placeholder="Enter author name"
+          required
+        />
+        <span *ngIf="hasError('author')" class="error-message">{{ getError('author') }}</span>
+      </div>
 
-  <button type="submit">Save</button>
-</form>
+      <!-- ISBN Field -->
+      <div class="form-group">
+        <label class="form-label" for="isbn">📘 ISBN *</label>
+        <input
+          type="text"
+          id="isbn"
+          name="isbn"
+          class="form-control"
+          [class.error]="hasError('isbn')"
+          [(ngModel)]="book.isbn"
+          (input)="onISBNChange()"
+          (blur)="onISBNChange()"
+          placeholder="Enter ISBN (10 or 13 digits)"
+          required
+        />
+        <span *ngIf="hasError('isbn')" class="error-message">{{ getError('isbn') }}</span>
+      </div>
+
+      <!-- Publication Date Field -->
+      <div class="form-group">
+        <label class="form-label" for="publicationDate">📅 Publication Date *</label>
+        <input
+          type="date"
+          id="publicationDate"
+          name="publicationDate"
+          class="form-control"
+          [class.error]="hasError('publicationDate')"
+          [(ngModel)]="book.publicationDate"
+          (change)="onPublicationDateChange()"
+          (blur)="onPublicationDateChange()"
+          required
+        />
+        <span *ngIf="hasError('publicationDate')" class="error-message">{{ getError('publicationDate') }}</span>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" (click)="cancel()" [disabled]="loading">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-success" [disabled]="loading">
+          <div *ngIf="loading" class="spinner"></div>
+          <span class="btn-icon" *ngIf="!loading">{{ isEditMode ? '💾' : '➕' }}</span>
+          {{ isEditMode ? 'Update Book' : 'Create Book' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

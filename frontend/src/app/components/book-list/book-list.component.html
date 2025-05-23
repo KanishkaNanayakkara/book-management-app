@@ -1,25 +1,79 @@
-<h2>Book List</h2>
-<a routerLink="/add">Add Book</a>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Author</th>
-      <th>ISBN</th>
-      <th>Publication Date</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let book of books">
-      <td>{{ book.title }}</td>
-      <td>{{ book.author }}</td>
-      <td>{{ book.isbn }}</td>
-      <td>{{ book.publicationDate }}</td>
-      <td>
-        <a [routerLink]="['/edit', book.id]">Edit</a> |
-        <button (click)="deleteBook(book.id!)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">📖 My Library</h1>
+    <a routerLink="/add" class="btn btn-primary btn-lg">
+      <span class="btn-icon">➕</span>
+      Create Book
+    </a>
+  </div>
+
+  <div class="table-container" *ngIf="!loading && books.length > 0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>📖 Title</th>
+          <th>✍️ Author</th>
+          <th>📘 ISBN</th>
+          <th>📅 Publication Date</th>
+          <th>⚡ Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books; trackBy: trackByFn">
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.isbn }}</td>
+          <td>{{ formatDate(book.publicationDate) }}</td>
+          <td>
+            <div class="action-buttons">
+              <a [routerLink]="['/edit', book.id]" class="btn btn-secondary btn-sm">
+                <span class="btn-icon">✏️</span>
+                Edit
+              </a>
+              <button (click)="confirmDelete(book.id!)" class="btn btn-danger btn-sm">
+                <span class="btn-icon">🗑️</span>
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading your books...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && books.length === 0" class="empty-state">
+    <div class="empty-icon">📚</div>
+    <h3>No books in your library yet</h3>
+    <p>Start building your collection by adding your first book!</p>
+    <a routerLink="/add" class="btn btn-primary">
+      <span class="btn-icon">➕</span>
+      Add Your First Book
+    </a>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="deleteModalVisible" (click)="cancelDelete()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">🗑️ Confirm Delete</h3>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this book? This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="cancelDelete()">Cancel</button>
+      <button class="btn btn-danger" (click)="deleteBook()">
+        <span class="btn-icon">🗑️</span>
+        Delete Book
+      </button>
+    </div>
+  </div>
+</div>
