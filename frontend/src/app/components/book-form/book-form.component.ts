@@ -45,9 +45,10 @@ export class BookFormComponent {
       this.bookService.getBook(id).subscribe({
         next: (data) => {
           this.book = data;
-          // Format date for input field
           if (this.book.publicationDate) {
-            this.book.publicationDate = this.formatDateForInput(this.book.publicationDate);
+            this.book.publicationDate = this.formatDateForInput(
+              this.book.publicationDate
+            );
           }
           this.loading = false;
         },
@@ -55,19 +56,18 @@ export class BookFormComponent {
           this.toastService.showError('Failed to load book details');
           this.router.navigate(['/']);
           this.loading = false;
-        }
+        },
       });
     }
   }
 
-  // Real-time validation methods for individual fields
   validateTitle() {
     if (!this.book.title?.trim()) {
       this.errors.title = 'Title is required';
     } else if (this.book.title.trim().length < 2) {
       this.errors.title = 'Title must be at least 2 characters long';
     } else {
-      delete this.errors.title; // Clear the error
+      delete this.errors.title;
     }
   }
 
@@ -77,7 +77,7 @@ export class BookFormComponent {
     } else if (this.book.author.trim().length < 2) {
       this.errors.author = 'Author name must be at least 2 characters long';
     } else {
-      delete this.errors.author; // Clear the error
+      delete this.errors.author;
     }
   }
 
@@ -85,9 +85,10 @@ export class BookFormComponent {
     if (!this.book.isbn?.trim()) {
       this.errors.isbn = 'ISBN is required';
     } else if (!this.isValidISBN(this.book.isbn.trim())) {
-      this.errors.isbn = 'ISBN must be 10 to 15 characters long and contain only letters and numbers)';
+      this.errors.isbn =
+        'ISBN must be 10 to 15 characters long and contain only letters and numbers)';
     } else {
-      delete this.errors.isbn; // Clear the error
+      delete this.errors.isbn;
     }
   }
 
@@ -97,11 +98,10 @@ export class BookFormComponent {
     } else if (new Date(this.book.publicationDate) > new Date()) {
       this.errors.publicationDate = 'Publication date cannot be in the future';
     } else {
-      delete this.errors.publicationDate; // Clear the error
+      delete this.errors.publicationDate;
     }
   }
 
-  // Event handlers for real-time validation
   onTitleChange() {
     this.validateTitle();
   }
@@ -122,7 +122,6 @@ export class BookFormComponent {
     this.errors = {};
     let isValid = true;
 
-    // Title validation
     if (!this.book.title?.trim()) {
       this.errors.title = 'Title is required';
       isValid = false;
@@ -131,7 +130,6 @@ export class BookFormComponent {
       isValid = false;
     }
 
-    // Author validation
     if (!this.book.author?.trim()) {
       this.errors.author = 'Author is required';
       isValid = false;
@@ -140,7 +138,6 @@ export class BookFormComponent {
       isValid = false;
     }
 
-    // ISBN validation
     if (!this.book.isbn?.trim()) {
       this.errors.isbn = 'ISBN is required';
       isValid = false;
@@ -149,7 +146,6 @@ export class BookFormComponent {
       isValid = false;
     }
 
-    // Publication date validation
     if (!this.book.publicationDate) {
       this.errors.publicationDate = 'Publication date is required';
       isValid = false;
@@ -162,13 +158,11 @@ export class BookFormComponent {
   }
 
   isValidISBN(isbn: string): boolean {
-  // Remove hyphens and spaces
-  const cleanISBN = isbn.replace(/[-\s]/g, '');
+    // Remove hyphens and spaces
+    const cleanISBN = isbn.replace(/[-\s]/g, '');
 
-  // Allow letters and numbers, length between 10 and 15
-  return /^[A-Za-z0-9]{10,15}$/.test(cleanISBN);
+    return /^[A-Za-z0-9]{10,15}$/.test(cleanISBN);
   }
-
 
   formatDateForInput(dateString: string): string {
     const date = new Date(dateString);
@@ -188,7 +182,7 @@ export class BookFormComponent {
       ...this.book,
       title: this.book.title.trim(),
       author: this.book.author.trim(),
-      isbn: this.book.isbn.trim()
+      isbn: this.book.isbn.trim(),
     };
 
     if (this.isEditMode) {
@@ -200,7 +194,7 @@ export class BookFormComponent {
         error: (error) => {
           this.toastService.showError('Failed to update book');
           this.loading = false;
-        }
+        },
       });
     } else {
       this.bookService.createBook(bookData).subscribe({
@@ -211,7 +205,7 @@ export class BookFormComponent {
         error: (error) => {
           this.toastService.showError('Failed to create book');
           this.loading = false;
-        }
+        },
       });
     }
   }
