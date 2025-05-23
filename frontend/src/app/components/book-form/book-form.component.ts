@@ -85,7 +85,7 @@ export class BookFormComponent {
     if (!this.book.isbn?.trim()) {
       this.errors.isbn = 'ISBN is required';
     } else if (!this.isValidISBN(this.book.isbn.trim())) {
-      this.errors.isbn = 'Please enter a valid ISBN (10 or 13 digits)';
+      this.errors.isbn = 'ISBN must be 10 to 15 characters long and contain only letters and numbers)';
     } else {
       delete this.errors.isbn; // Clear the error
     }
@@ -162,12 +162,13 @@ export class BookFormComponent {
   }
 
   isValidISBN(isbn: string): boolean {
-    // Remove hyphens and spaces
-    const cleanISBN = isbn.replace(/[-\s]/g, '');
-    
-    // Check if it's 10 or 13 digits
-    return /^\d{10}$/.test(cleanISBN) || /^\d{13}$/.test(cleanISBN);
+  // Remove hyphens and spaces
+  const cleanISBN = isbn.replace(/[-\s]/g, '');
+
+  // Allow letters and numbers, length between 10 and 15
+  return /^[A-Za-z0-9]{10,15}$/.test(cleanISBN);
   }
+
 
   formatDateForInput(dateString: string): string {
     const date = new Date(dateString);
